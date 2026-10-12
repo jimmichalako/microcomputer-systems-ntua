@@ -1,0 +1,47 @@
+IN 10H
+LXI B,01F4H ; BC holds delay value 500
+MVI A,FEH ; A holds LSB LED position
+
+OUTPUT:
+STA 3000H ; light LED in position A
+MOV D,A ; D holds previous LED position
+
+START:
+CALL DELB ; delay by 0.5s
+LDA 2000H ; load input in A
+ANI 03H ; set all bits of A to 0 except the 2 LSBs
+CPI 01H ; check if LSB is 1
+JZ LEFT_SHIFT ; if true shift left
+
+RETURN:
+CPI 00H ; check if LSB is 0
+JZ LEFT_CYCLE ; if true cycle left
+JMP START ; else 2nd LSB is 1 so stop moving and loop
+
+LEFT_CYCLE:
+MOV A,D ; A holds previous LED position
+RLC ; rotate left accumulator through carry
+JMP OUTPUT ; go to output
+
+LEFT_SHIFT:
+MOV A,D ; A holds previous LED position
+CPI 7FH ; check if LED position is MSB 
+JZ RIGHT_SHIFT ; if true shift right
+RLC ; else rotate left accumulator through carry
+JMP OUTPUT ; go to ouput
+
+RIGHT_SHIFT:
+MOV A,D ; A holds previous LED position
+CPI FEH ; check if LED position is LSB
+JZ LEFT_SHIFT ; if true shift left
+RRC ; rotate right accumulator through carry
+STA 3000H ; light LED in position A
+MOV D,A ; D holds previous LED position
+CALL DELB ; delay by 0.5s
+LDA 2000H ; load input in A
+ANI 03H ; set all bits of A to 0 except the 2 LSBs
+CPI 01H ; check if LSB is 1
+JZ RIGHT_SHIFT ; if true shift right 
+JMP RETURN ; else check for cycle left
+
+END

@@ -1,0 +1,61 @@
+START:
+	CALL KIND	;manually check if input is 1-8
+	CPI 08H
+	JZ EIGHT
+	CPI 07H
+	JZ SEVEN
+	CPI 06H
+	JZ SIX
+	CPI 05H
+	JZ FIVE
+	CPI 04H
+	JZ FOUR
+	CPI 03H
+	JZ THREE
+	CPI 02H
+	JZ TWO
+	CPI 01H
+	JZ ONE
+	JMP START
+EIGHT:  
+    	MVI A,7FH  ; Load value 127 into register A
+    	STA 3000H  ; ON LEDs X0000000 
+    	JMP START  ; Start over
+
+SEVEN:  
+    	MVI A,3FH  ; Load value 63 into register A
+    	STA 3000H  ; ON LEDs XX000000
+    	JMP START  ; Start over
+
+SIX:  
+    	MVI A,1FH  ; Load value 31 into register A
+    	STA 3000H  ; ON LEDs XXX00000
+    	JMP START  ; Start over
+
+FIVE:      
+	MVI A,0FH  ; Load value 15 into register A
+    	STA 3000H  ; ON LEDs XXXX0000
+    	JMP START  ; Start over
+
+FOUR:  
+    	MVI A,07H  ; Load value 7 register A
+    	STA 3000H  ; ON LEDs XXXXX000
+    	JMP START  ; Start over
+
+THREE:  
+    	MVI A,03H  ; Load value 3 into register A
+    	STA 3000H  ; ON LEDs XXXXXX00
+    	JMP START  ; Start over
+
+TWO:  
+    	MVI A,01H  ; Load value 1 into register A
+    	STA 3000H  ; ON LEDs XXXXXXX0
+    	JMP START  ; Start over
+
+ONE:  
+    	MVI A,00H  ; Load value 0 into register A
+    	STA 3000H  ; ON LEDs XXXXXXXX
+    	JMP START  ; Start over
+END
+	
+	

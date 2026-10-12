@@ -1,0 +1,36 @@
+START:
+MVI B,FFH ; tens counter
+LDA 2000H ; load input in A
+CPI 64H ; check if A>99
+JNC OVER99 ; if true jump to OVER99
+
+UNDER100:
+INR B ; increase number of tens
+SUI 0AH ; subtract 10 from A
+JNC UNDER100 ; while A>0 loop
+ADI 0AH ; loop runs one extra time so we correct by adding 10 to A
+MOV C,A ; C holds the ones
+MOV A,B ; A holds the tens
+RLC ; shift left 4 times to move tens to the 4 MSB of C
+RLC
+RLC
+RLC
+ADD C ; add C to A so that we have 4MSB->tens 4LSB->ones
+CMA ; complement A because LEDs are in negative logic
+STA 3000H ; output A in LEDs
+JMP START
+
+OVER99:
+CPI C8H ; check if A>199
+JNC OVER199 ; if true jump to OVER199
+SUI 64H ; else subtract 100 from A
+JMP UNDER100 ; now A<100 so same as before, jump to UNDER100 
+
+OVER199:
+MVI A,00H ; set all bits of A to 0 (All LEDs are on)
+STA 3000H ; output A in LEDs
+JMP START
+
+END
+
+

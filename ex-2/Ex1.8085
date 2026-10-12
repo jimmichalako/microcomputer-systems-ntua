@@ -1,0 +1,60 @@
+;Ask (a)
+
+	IN 10H
+	MVI A,00H   	;store value in A register
+	LXI H,0900H 	;store address in HL register 
+	MOV M,A
+STORE:
+	INR A        	;increment value 
+	INX H        	;increment address
+	MOV M,A      	;store value A in address M
+	CPI 7FH      	;check if A<127
+	JNZ STORE    	;if true repeat
+
+;Ask (b)
+
+	LXI B,0000H  	;store number of 1s
+LOAD:
+	MOV A,M     	;M=097FH
+	MVI D,08H    	;D=8, 7 digits + 1 extra for first iteration
+DIGITS:	      
+	DCR D        
+	JZ NEXT      	;If we checked all digits (D=0), go to next number
+	RRC          
+	JNC DIGITS  	;If CY=1 count the 1, else go to next digit
+ONES:
+	INX B		;count the 1
+	JMP DIGITS	;go to next digit
+NEXT:
+	DCR L        	;decrease L to check next address
+	JNZ LOAD     	;until you checked all of them (HL=0000)
+	
+	;uncomment to check B or C on LEDs
+	;MOV A,B
+	;MOV A,C
+	;CMA
+	;STA 3000H
+
+;Ask (c)
+	
+	MVI D,00H    	;store condition count
+	MVI E,80H	;check for all 128 numbers
+	MOV A,M      	;M=0900H
+COMPARE:
+	CPI 10H      	;check if A<10H
+	JC SKIP	;if not skip
+	CPI 61H  	;check if A>60H 
+	JNC SKIP	;if not skip
+	INR D        	;else count condition true
+SKIP:	
+	INR L        	;go to next address
+	MOV A,M	;and load the value
+	DCR E		
+	JZ END		;if E=00 we are done
+	JMP COMPARE       		
+END:
+	;uncomment to check D on LEDs
+	;MOV A,D
+	;CMA
+	;STA 3000H
+	END

@@ -1,0 +1,44 @@
+START:
+	LDA 2000H	;Load input from dip switches to A
+	MOV B,A	;Save A to register B
+	
+A3_B3_AND_A2_B2:
+	RLC		;Rotate once to line up A3/B3 and A2/B2
+	XRA B		;A = A Xor B
+	MOV C,A	;Store A
+	ANI 80H	;Isolate MSB X000-0000
+	MOV D,A	;Store A3/B3
+	RRC	
+	RRC		;Line up for OR gate	
+	ORA C		
+	RLC		;move 1 left to store X2 after X3
+	ANI 60H	;A=0X00-0000
+	ORA D		;A=XX00-0000
+	RRC
+	RRC
+	RRC
+	RRC
+	ANI 0CH
+	MOV D,A   	;D = 0000-XX00
+	MOV A,B	;reset A
+
+A1_B1_AND_A0_B0:
+	RLC		;Rotate once to line up A0/B0 and A1/B1
+	ANA B		;A = A and B
+	MOV C,A	;Store A
+	ANI 08H	;A=0000-X000
+	MOV B,A	;B=0000-X000
+	RRC	
+	RRC		;Line up for OR gate	
+	ORA C		;A=0000-00X0		
+	ANI 02H	;A=0000-00X0
+	RLC		
+	ORA B		;A=0000-XX00
+	RRC
+	RRC
+	ORA D
+	CMA
+	STA 3000H	
+	JMP START
+	
+END

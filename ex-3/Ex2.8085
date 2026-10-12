@@ -1,0 +1,68 @@
+INITIALIZE:
+	MVI C,0CH			;our values for K1,K2 and K3
+	MVI D,31H
+	MVI E,8FH
+
+	INR C
+	INR D
+	INR E 				;We increase by 1 because we use CMP and JC to check the ranges
+
+	MVI A,10H 			;empty all display bytes
+	STA 0B00H
+	STA 0B01H
+	STA 0B02H
+	STA 0B03H
+	STA 0B04H
+	STA 0B05H
+
+	MVI A,0DH 			;interrupt mask to allow rst 6.5
+	SIM
+	EI 				;enable interrupts
+
+WAIT: 
+	JMP WAIT
+
+INTR_ROUTINE:
+	POP H 				;reduce stack
+	CALL KIND 			;read keyboard
+	STA 0B03H			;store to 3rd display byte
+	RLC
+	RLC
+	RLC
+	RLC 				;multiply by 16
+	MOV B,A			;store first digit
+	CALL KIND
+	STA 0B02H			;store to 4th display byte
+	ADD B 				;get total number
+	MOV B,A
+	PUSH D 			;temporarily save D and E
+	LXI D,0B00H 			;address for STDM
+	CALL STDM
+	CALL DCD
+	POP D 				;restore D and E
+	MOV A,B
+
+	CMP C
+	JC LED0
+	CMP D
+	JC LED1
+	CMP E
+	JC LED2
+
+	MVI A,F7H 			;(K3...FF]
+	JMP FINISH
+LED0: 
+	MVI A,FEH			;[0...?1]
+	JMP FINISH
+LED1: 
+	MVI A,FDH			;(K1...?2]
+	JMP FINISH
+LED2: 
+	MVI A,FBH			;(K2...?3]
+
+FINISH:
+	STA 3000H			;store to LEDs
+	EI
+	JMP WAIT
+
+END

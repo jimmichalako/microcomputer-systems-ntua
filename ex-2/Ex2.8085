@@ -1,0 +1,45 @@
+	LXI B,0064H	;delay of 64H=100ms for delb
+	MVI D,C8H	;D=200, number of times to call delb for 20s delay
+START:
+	LDA 2000H	;load input from dip switches
+	RLC		;rotate left to get MSB
+	JNC OFF	;check if MSB is off, then go to OFF
+	JMP START	;else start again
+OFF:			
+	LDA 2000H	
+	RLC
+	JC ON1		;check if MSB is on, then go to ON1
+	JMP OFF	;else repeat until on
+ON1:
+	LDA 2000H
+	RLC		
+	JNC LIGHTS	;check if MSB is off again, then go to LIGHTS
+	JMP ON1	;else repeat until off
+LIGHTS:		;button is pressed so we turn on lights
+	LDA 2000H	
+	RLC		
+	JC ON2		;check if MSB is on again, then go to ON2
+	MVI A,00H	
+	STA 3000H	;switch on all LEDs
+	CALL DELB	;delay 1 time
+	DCR D		;decrease D until zero
+	JNZ LIGHTS	;repeat for 200 times (20s delay)
+	MVI A,FFH
+	STA 3000H	;switch off all LEDs
+	JMP OFF	;start again
+ON2:			;button is pressed before 20s delay
+	LDA 2000H
+	RLC		
+	JNC RST	;check if MSB is off, then go to RST
+	MVI A,00H	;else do same as before until off
+	STA 3000H
+	CALL DELB
+	DCR D
+	JNZ ON2
+	MVI A,FFH
+	STA 3000H
+	JMP OFF
+RST:			;reset the timer for the lights	
+	MVI D,C8H
+	JMP LIGHTS
+	END
