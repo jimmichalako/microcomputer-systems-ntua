@@ -1,6 +1,6 @@
 # NTUA ECE Microcomputer Systems Course
 
-This repository showcases the laboratory assignments, projects, and coursework I completed during the Microcomputer Systems course at the National Technical University of Athens (NTUA). Through this coursework, I gained hands-on experience in low-level systems programming, developing assembly firmware for the Intel 8085 microprocessor and AVR ATmega328PB microcontroller, configuring hardware interrupts and memory interfaces, and building embedded C routines for microcontroller peripherals.
+This repository showcases the laboratory assignments, projects, and coursework I completed during the Microcomputer Systems course at the National Technical University of Athens (NTUA). Through this coursework, I strengthened my foundation in low-level systems programming, developing assembly firmware for the Intel 8085 microprocessor and AVR ATmega328PB microcontroller, configuring hardware interrupts and memory interfaces, and building embedded C routines for microcontroller peripherals.
 
 ---
 
