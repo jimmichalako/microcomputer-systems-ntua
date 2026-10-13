@@ -2,8 +2,6 @@
 
 This repository showcases the laboratory assignments, projects, and coursework I completed during the Microcomputer Systems course at the National Technical University of Athens (NTUA). Through this coursework, I strengthened my foundation in low-level systems programming, developing assembly firmware for the Intel 8085 microprocessor and AVR ATmega328PB microcontroller, configuring hardware interrupts and memory interfaces, and building embedded C routines for microcontroller peripherals.
 
----
-
 ## Laboratory Exercises & Assignments
 
 ### Assignment 1: Machine Code Disassembly, LED Scanning & BCD Conversion
@@ -51,8 +49,6 @@ This repository showcases the laboratory assignments, projects, and coursework I
   * **Ex 1 (Assembly External Interrupts):** Configured edge-triggered interrupts on `INT0` (`PD2`) via `EICRA` and `EIMSK`. Implemented manual stack preservation for the Status Register (`SREG`) and working registers inside the ISR (`0x002`) while triggering timed LED responses on PORTB.
   * **Ex 2 (Embedded C Interrupt Service Routine):** Configured rising-edge interrupts on `INT1` (`PD3`) using AVR-GCC libraries (`<avr/io.h>`, `<avr/interrupt.h>`) to handle external triggers, state timing loops, and manual interrupt flag clearing via `EIFR`.
 * **Tech Stack:** AVR Assembly, Embedded C (AVR-GCC), ATmega328PB, Interrupt Subsystems.
-
----
 
 ## Technologies Used
 
